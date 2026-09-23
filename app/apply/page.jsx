@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { checkPhoneExists, sendAskEvaOtp, submitLead, makeBypassToken } from '@/lib/admissionApi';
+import { sendAskEvaOtp, submitLead, makeBypassToken } from '@/lib/admissionApi';
 import { openRazorpayPaymentButton } from '@/lib/razorpay';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -290,26 +290,16 @@ export default function ApplyPage() {
     const rel = relationship || 'Father';
     setLoading(true);
     try {
-      const res = await checkPhoneExists(primaryContact.phone);
-      if (res.exists) {
-        setIsExistingUser(true);
-        setExistingLead(res.lead);
-        const token = makeBypassToken(primaryContact.phone);
-        setVerificationToken(token);
-        prefillFormFromContact(rel, primaryContact, res.lead);
-        setCurrentStep('lead_form');
-      } else {
-        setIsExistingUser(false);
-        setExistingLead(null);
-        const otpRes = await sendAskEvaOtp(primaryContact.phone);
-        setGeneratedOtp(otpRes.otp);
-        setOtpSentPhone(primaryContact.phone);
-        setOtpCountdown(OTP_RESEND_SECONDS);
-        setOtpDigits(Array(OTP_LENGTH).fill(''));
-        setOtpError('');
-        prefillFormFromContact(rel, primaryContact, null);
-        setCurrentStep('otp');
-      }
+      setIsExistingUser(false);
+      setExistingLead(null);
+      const otpRes = await sendAskEvaOtp(primaryContact.phone);
+      setGeneratedOtp(otpRes.otp);
+      setOtpSentPhone(primaryContact.phone);
+      setOtpCountdown(OTP_RESEND_SECONDS);
+      setOtpDigits(Array(OTP_LENGTH).fill(''));
+      setOtpError('');
+      prefillFormFromContact(rel, primaryContact, null);
+      setCurrentStep('otp');
     } catch (err) {
       setApiError(err.message || 'Failed to process request. Please try again.');
     } finally {
@@ -330,26 +320,16 @@ export default function ApplyPage() {
 
     setLoading(true);
     try {
-      const res = await checkPhoneExists(primaryContact.phone);
-      if (res.exists) {
-        setIsExistingUser(true);
-        setExistingLead(res.lead);
-        const token = makeBypassToken(primaryContact.phone);
-        setVerificationToken(token);
-        prefillFormFromContact(relationship, primaryContact, res.lead);
-        setCurrentStep('lead_form');
-      } else {
-        setIsExistingUser(false);
-        setExistingLead(null);
-        const otpRes = await sendAskEvaOtp(primaryContact.phone);
-        setGeneratedOtp(otpRes.otp);
-        setOtpSentPhone(primaryContact.phone);
-        setOtpCountdown(OTP_RESEND_SECONDS);
-        setOtpDigits(Array(OTP_LENGTH).fill(''));
-        setOtpError('');
-        prefillFormFromContact(relationship, primaryContact, null);
-        setCurrentStep('otp');
-      }
+      setIsExistingUser(false);
+      setExistingLead(null);
+      const otpRes = await sendAskEvaOtp(primaryContact.phone);
+      setGeneratedOtp(otpRes.otp);
+      setOtpSentPhone(primaryContact.phone);
+      setOtpCountdown(OTP_RESEND_SECONDS);
+      setOtpDigits(Array(OTP_LENGTH).fill(''));
+      setOtpError('');
+      prefillFormFromContact(relationship, primaryContact, null);
+      setCurrentStep('otp');
     } catch (err) {
       setApiError(err.message || 'Failed to process request. Please try again.');
     } finally {
