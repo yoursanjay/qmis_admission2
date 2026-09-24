@@ -13,6 +13,7 @@ export default function RedirectPage() {
     const countdownTimer = window.setInterval(() => setSeconds((value) => Math.max(1, value - 1)), 1000);
     const redirectTimer = window.setTimeout(() => {
       window.clearInterval(countdownTimer);
+      document.cookie = 'qmis-return-to-home=1; Max-Age=10; Path=/; SameSite=Lax';
       window.location.assign(destination);
     }, 3000);
     return () => {
