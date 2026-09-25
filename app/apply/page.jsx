@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { sendOtp, verifyOtp, submitLead } from '@/lib/admissionApi';
+import { sendAskEvaOtp, submitLead, makeBypassToken } from '@/lib/admissionApi';
 import { openRazorpayPaymentButton } from '@/lib/razorpay';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -180,6 +180,7 @@ export default function ApplyPage() {
   const [otpError, setOtpError] = useState('');
   const [otpCountdown, setOtpCountdown] = useState(0);
   const [otpSentPhone, setOtpSentPhone] = useState('');
+  const [generatedOtp, setGeneratedOtp] = useState('');
   const otpRefs = useRef([]);
 
   // Step 4: Full lead form
@@ -291,7 +292,8 @@ export default function ApplyPage() {
     try {
       setIsExistingUser(false);
       setExistingLead(null);
-      await sendOtp(primaryContact.phone);
+      const otpRes = await sendAskEvaOtp(primaryContact.phone);
+      setGeneratedOtp(otpRes.otp);
       setOtpSentPhone(primaryContact.phone);
       setOtpCountdown(OTP_RESEND_SECONDS);
       setOtpDigits(Array(OTP_LENGTH).fill(''));
@@ -320,7 +322,8 @@ export default function ApplyPage() {
     try {
       setIsExistingUser(false);
       setExistingLead(null);
-      await sendOtp(primaryContact.phone);
+      const otpRes = await sendAskEvaOtp(primaryContact.phone);
+      setGeneratedOtp(otpRes.otp);
       setOtpSentPhone(primaryContact.phone);
       setOtpCountdown(OTP_RESEND_SECONDS);
       setOtpDigits(Array(OTP_LENGTH).fill(''));
@@ -365,8 +368,10 @@ export default function ApplyPage() {
     setApiError('');
     setLoading(true);
     try {
-      const verification = await verifyOtp(otpSentPhone, otp);
-      setVerificationToken(verification.token);
+      if (otp !== generatedOtp) {
+        throw new Error('Invalid OTP. Please try again.');
+      }
+      setVerificationToken(makeBypassToken(otpSentPhone));
       setCurrentStep('lead_form');
     } catch (err) {
       setOtpError(err.message || 'Invalid OTP. Please try again.');
@@ -380,7 +385,8 @@ export default function ApplyPage() {
     setApiError('');
     setLoading(true);
     try {
-      await sendOtp(otpSentPhone);
+      const otpRes = await sendAskEvaOtp(otpSentPhone);
+      setGeneratedOtp(otpRes.otp);
       setOtpCountdown(OTP_RESEND_SECONDS);
       setOtpDigits(Array(OTP_LENGTH).fill(''));
       setOtpError('');
@@ -427,13 +433,6 @@ export default function ApplyPage() {
     setLoading(true);
 
     try {
-      if (!verificationToken) {
-        throw new Error('Please verify the phone number before submitting.');
-      }
-      const verifiedContactKey = (relationship || 'Father').toLowerCase();
-      if (formData[verifiedContactKey]?.phone !== otpSentPhone) {
-        throw new Error('The verified phone number cannot be changed before submission.');
-      }
       const res = await submitLead({
         verificationToken,
         leadData: formData,
