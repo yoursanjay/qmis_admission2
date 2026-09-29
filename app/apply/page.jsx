@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { sendOtp, verifyOtp, submitLead } from '@/lib/admissionApi';
 import { openRazorpayPaymentButton } from '@/lib/razorpay';
@@ -162,6 +163,7 @@ function SignInLink({ onClick }) {
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function ApplyPage() {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState('intro');
   const [flowMode, setFlowMode] = useState('apply'); // 'apply' | 'signin'
   const [isExistingUser, setIsExistingUser] = useState(false);
@@ -198,8 +200,8 @@ export default function ApplyPage() {
   });
   const [formErrors, setFormErrors] = useState({});
 
-  // Step 5: Enquiry number
-  const [enquiryNumber, setEnquiryNumber] = useState(null);
+  // Step 5: Reference number
+  const [referenceNo, setReferenceNo] = useState(null);
 
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState('');
@@ -441,11 +443,11 @@ export default function ApplyPage() {
         addedBy: 'Admission Portal',
         ...(isExistingUser && existingLead ? { leadId: existingLead.id } : {}),
       });
-      setEnquiryNumber(res.applicationNo || res.lead?.application_no);
+      setReferenceNo(res.referenceNo);
       setCurrentStep('step5');
     } catch (err) {
       if (err.status === 409) {
-        setEnquiryNumber(err.data?.existingLead?.application_no);
+        setReferenceNo(err.data?.existingLead?.referenceNo);
         setCurrentStep('step5');
       } else {
         setApiError(err.message || 'Submission failed. Please try again.');
@@ -1027,9 +1029,9 @@ export default function ApplyPage() {
           We&apos;re delighted to confirm your successful registration
         </p>
 
-        {enquiryNumber && (
+        {referenceNo && (
           <p className="text-[#CC0000] font-bold text-base mb-5">
-            your unique enquiry number is <span className="text-[#1a2252]">{enquiryNumber}</span>
+            your unique enquiry number is <span className="text-[#1a2252]">{referenceNo}</span>
           </p>
         )}
 
@@ -1096,10 +1098,10 @@ export default function ApplyPage() {
         </ul>
 
         <button
-          onClick={() => setCurrentStep('step7')}
+          onClick={() => router.replace('/')}
           className="bg-[#CC0000] hover:bg-[#990000] text-white font-semibold px-8 py-2.5 rounded-md transition-colors"
         >
-          Next
+          OK
         </button>
 
       </div>
