@@ -1,13 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
 import { CheckCircle, FileText, LoaderCircle, UploadCloud, X } from 'lucide-react';
-import {
-  CareerSiteFooter,
-  CareerSiteHeader,
-  PageHeader,
-} from '@/components/CareerSiteChrome';
 
 const API_URL = '/api/careers';
 
@@ -18,14 +12,6 @@ const ALLOWED_RESUME_TYPES = [
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   'text/plain',
   'application/rtf',
-];
-
-const functionalAreas = [
-  { img: '/career-guidance/5.png', title: 'Academics' },
-  { img: '/career-guidance/Pic_11.png', title: 'Sports' },
-  { img: '/career-guidance/7.png', title: 'Performance Arts' },
-  { img: '/career-guidance/8.png', title: 'Martial Arts' },
-  { img: '/career-guidance/9.png', title: 'Non - Academics Department' },
 ];
 
 const initialForm = {
@@ -197,74 +183,8 @@ export default function CareerPage() {
 
   return (
     <>
-      <CareerSiteHeader />
-      <main className="min-h-screen bg-white text-[#17244f]">
-        <PageHeader contentTitle="Career At Qmis" />
-
-        <section className="bg-[#f8fafc] px-5 py-14 sm:py-16">
-          <div className="mx-auto max-w-5xl text-center">
-            <h2 className="text-2xl font-bold leading-tight text-navy sm:text-3xl">
-              Join a Community That Values Your Impact
-            </h2>
-            <p className="mx-auto mt-5 max-w-4xl text-base leading-7 text-gray-700">
-              At Queen Mira International School (QMIS), every role—within and beyond the
-              classroom—contributes to advancing a globally competitive educational environment.
-              We welcome passionate Educational and Institutional Professionals who embody
-              excellence, innovation, and a commitment to service.
-            </p>
-          </div>
-        </section>
-
-        <section className="px-5 py-14 sm:py-16">
-          <div className="mx-auto max-w-6xl">
-            <h2 className="text-center text-2xl font-bold text-navy sm:text-3xl">
-              The QMIS Advantage
-            </h2>
-            <div className="mt-9 grid divide-y divide-gray-300 border-y border-gray-300 md:grid-cols-3 md:divide-x md:divide-y-0">
-              {[
-                <>Progressive, collaborative<br className="hidden sm:block" /> work culture</>,
-                <>Opportunities for continuous<br className="hidden sm:block" /> growth and leadership</>,
-                <>A supportive community grounded<br className="hidden sm:block" /> in integrity and teamwork</>,
-              ].map((text, index) => (
-                <div
-                  key={index}
-                  className="flex min-h-28 items-center justify-center px-5 py-7 text-center text-base font-semibold leading-6 text-[#17244f] md:px-7"
-                >
-                  {text}
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="bg-[#f8fafc] px-5 py-12 sm:py-16">
-          <div className="mx-auto max-w-[1108px]">
-            <h2 className="text-left text-2xl font-semibold text-navy sm:text-3xl">
-              Join Us Across Various Functional Areas
-            </h2>
-            <div className="mt-1 grid grid-cols-1 justify-items-center gap-x-6 gap-y-7 sm:grid-cols-[repeat(2,minmax(0,275px))] sm:justify-center lg:grid-cols-[repeat(3,275px)] lg:justify-start">
-              {functionalAreas.map((area) => (
-                <article
-                  key={area.title}
-                  className="flex h-[222px] w-full max-w-[275px] flex-col items-center justify-center overflow-hidden rounded-xl border border-gray-200/80 bg-[#fafbfc] shadow-sm"
-                >
-                  <Image
-                    src={area.img}
-                    alt={area.title}
-                    width={112}
-                    height={112}
-                    className="h-28 w-28 object-contain"
-                  />
-                  <h3 className="mt-3 px-2 text-center text-base font-normal leading-6 text-[#202B63]">
-                    {area.title}
-                  </h3>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="px-5 py-14 sm:py-16">
+      <main className="min-h-screen bg-[#f8fafc] px-4 py-10 text-[#17244f] sm:px-6 sm:py-14">
+        <section className="mx-auto max-w-4xl">
           <div className="mx-auto max-w-4xl">
             {isSubmitted ? (
               <div className="rounded-lg border border-gray-200 bg-white px-6 py-12 text-center shadow-sm sm:px-12">
@@ -509,7 +429,6 @@ export default function CareerPage() {
           </div>
         </section>
       </main>
-      <CareerSiteFooter />
       {toast && (
         <div
           role={toast.type === 'error' ? 'alert' : 'status'}

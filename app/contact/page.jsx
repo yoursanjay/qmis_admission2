@@ -1,17 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { Loader2, PhoneCall } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
-import {
-  CareerSiteFooter,
-  CareerSiteHeader,
-} from '@/components/CareerSiteChrome';
 
 const API_URL = '/api';
-
-const APPLY_NOW_URL =
-  'https://admissions.qmis.edu.in/?utm_source=Website&utm_medium=popup_form&utm_campaign=BBC&_gl=1%2A11hbug0%2A_ga%2AMTIyNDc1NDU3Ni4xNzY1MDQ3MzAx%2A_ga_K5HD0P2MHT%2AczE3NjU2NDQ5NTkkbzkkZzEkdDE3NjU2NDYwNTEkajYwJGwwJGgw';
 
 const initialForm = {
   name: '',
@@ -130,26 +123,14 @@ export default function ContactPage() {
     return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)} ${digits.slice(6, 10)}`;
   };
 
-  const openApplyNow = () => {
-    window.open(APPLY_NOW_URL, '_blank', 'noopener,noreferrer');
-  };
-
   return (
     <>
-      <CareerSiteHeader />
-      <main className="min-h-screen">
-        <div
-          className="w-full bg-grid-dots"
-          style={{
-            backgroundColor: '#f9fafb',
-            backgroundImage: 'radial-gradient(#d1d5db 1px, transparent 1px)',
-            backgroundSize: '20px 20px',
-          }}
-        >
-          <div className="mx-auto max-w-6xl px-4 py-10">
-            <h2 className="mb-6 text-2xl font-bold text-red-700">General Enquiry</h2>
-            <div className="grid gap-10 md:grid-cols-2">
-              <form onSubmit={submitContact} className="space-y-4" noValidate>
+      <main className="min-h-screen bg-[#f9fafb] px-4 py-10 sm:px-6 sm:py-14">
+        <section className="mx-auto max-w-3xl rounded-lg border border-gray-200 bg-white p-5 shadow-sm sm:p-8">
+          <h1 className="mb-7 text-center text-2xl font-bold text-[#1b234f] sm:text-3xl">
+            General Enquiry
+          </h1>
+          <form onSubmit={submitContact} className="space-y-4" noValidate>
                 <div>
                   <label htmlFor="contact-name" className="mb-1 block text-sm font-semibold">
                     Name <span className="text-red-600">*</span>
@@ -282,69 +263,9 @@ export default function ContactPage() {
                     'SUBMIT'
                   )}
                 </button>
-              </form>
-
-              <div className="flex flex-col items-center justify-start">
-                <div className="h-96 w-full">
-                  <img
-                    src="/contact.png"
-                    alt="Card image"
-                    className="h-full w-full rounded object-contain"
-                  />
-                </div>
-                <button
-                  type="button"
-                  onClick={openApplyNow}
-                  disabled={isSubmitting}
-                  className="mt-6 rounded bg-[#a12a2a] px-6 py-2 text-white hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  Apply Now
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <section className="mt-10 bg-[#1b234f] py-10 text-white">
-            <div className="mx-auto max-w-6xl px-4 text-center">
-              <div className="mb-4 flex justify-center text-3xl">
-                <PhoneCall aria-hidden="true" />
-              </div>
-              <p className="text-lg font-semibold">
-                <a href="tel:+919655777000" className="transition hover:text-red-400">
-                  +91 96557 77000
-                </a>
-              </p>
-              <p className="mb-6 text-lg font-semibold">
-                <a href="tel:+919787570746" className="transition hover:text-red-400">
-                  +91 97875 70746
-                </a>
-              </p>
-              <p className="text-sm">
-                <span className="font-bold">Address</span> Sholavandhan Road, Melakkal Road kochadai,
-                Madurai, Tamil Nadu, 625019
-              </p>
-              <p className="mt-2 text-sm">
-                <span className="font-bold">Email</span>{' '}
-                <a href="mailto:contact@queenmira.com" className="transition hover:text-red-400">
-                  contact@queenmira.com
-                </a>
-              </p>
-            </div>
-          </section>
-
-          <div className="mt-10 w-full">
-            <iframe
-              title="School Location Map"
-              src="https://www.google.com/maps/embed?pb=!1m23!1m12!1m3!1d3385.7174162986807!2d78.06721842708833!3d9.94930638278185!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m8!3e6!4m0!4m5!1s0x3b00cf295cdadddd%3A0x9ea7866071b1aa99!2sW3X8%2BJM7%20Queen%20Mira%20International%20School%20(CBSE%20with%20CIS%20Accredtion)%2C%20Madurai%20Sholavandhan%20Road%2C%20Melakkal%20Rd%2C%20Kochadai%2C%20Madurai%2C%20Tamil%20Nadu%20625019%2C%20India!3m2!1d9.949084!2d78.0696864!5e0!3m2!1sen!2sus!4v1765033188818!5m2!1sen!2sus"
-              className="h-[400px] w-full md:h-[500px]"
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
-          </div>
-        </div>
+          </form>
+        </section>
       </main>
-      <CareerSiteFooter />
       <Toaster position="top-right" />
     </>
   );
