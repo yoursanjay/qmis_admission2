@@ -1,6 +1,8 @@
 ﻿'use client';
 
-import { Facebook, Instagram, Youtube } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { Facebook, Instagram, Menu, X, Youtube } from 'lucide-react';
 
 const APPLY_URL = '/redirect?url=%2Fclient%2Fenquiry-form';
 const ageGroups = [
@@ -22,6 +24,19 @@ function ApplyNow({ children = 'Apply Now', className = '' }) {
 }
 
 export default function AdmissionsLandingPage() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isMenuOpen) return undefined;
+
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') setIsMenuOpen(false);
+    };
+
+    window.addEventListener('keydown', closeOnEscape);
+    return () => window.removeEventListener('keydown', closeOnEscape);
+  }, [isMenuOpen]);
+
   return (
     <main
       className="min-h-screen overflow-hidden bg-[#fffaf3] text-[#17244f]"
@@ -72,14 +87,61 @@ export default function AdmissionsLandingPage() {
         <div className="mx-auto flex h-[82px] max-w-[1120px] items-center justify-between px-5 md:px-6">
           <a href="/" className="flex items-center gap-2.5 leading-none">
             <img src="https://qmis-website.vercel.app/QMIS_Logo.webp" alt="Queen Mira International School" className="h-10 w-auto shrink-0 sm:h-11" />
-            <span className="text-[8.5px] font-bold uppercase leading-[0.96] tracking-[0.04em] text-[#070D43] sm:text-[9.5px]">queen<br />mira<br />international school</span>
           </a>
           <nav className="flex items-center gap-5 text-[13px] font-semibold text-[#070D43] sm:gap-7">
             <a href="https://qmis.edu.in/" className="whitespace-nowrap">Main Website</a>
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen((open) => !open)}
+              className="inline-flex h-8 w-8 shrink-0 items-center justify-center text-[#070D43] transition-colors hover:text-[var(--primary-red)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ED0016]"
+              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isMenuOpen}
+              aria-controls="qmis-side-menu"
+            >
+              {isMenuOpen ? <X size={21} /> : <Menu size={21} />}
+            </button>
             <ApplyNow className="inline-flex items-center justify-center whitespace-nowrap rounded-[4px] bg-[var(--primary-red)] px-4 py-2.5 text-[13px] font-bold text-white shadow-sm transition-colors hover:bg-[var(--primary-red)]">Apply Now</ApplyNow>
           </nav>
         </div>
       </header>
+
+      {isMenuOpen && (
+        <div className="fixed inset-x-0 bottom-0 top-[82px] z-50">
+          <button
+            type="button"
+            className="absolute inset-0 h-full w-full cursor-default bg-[#070D43]/35"
+            onClick={() => setIsMenuOpen(false)}
+            aria-label="Close menu"
+          />
+          <nav
+            id="qmis-side-menu"
+            aria-label="Additional navigation"
+            className="absolute right-0 top-0 flex h-full w-[min(20rem,85vw)] flex-col gap-1 bg-white px-6 py-8 text-[#070D43] shadow-xl"
+          >
+            <Link
+              href="/career"
+              onClick={() => setIsMenuOpen(false)}
+              className="rounded px-3 py-3 text-sm font-semibold transition-colors hover:bg-[#DCEEFF] hover:text-[var(--primary-red)]"
+            >
+              Career @QMIS
+            </Link>
+            <Link
+              href="/school-activities"
+              onClick={() => setIsMenuOpen(false)}
+              className="rounded px-3 py-3 text-sm font-semibold transition-colors hover:bg-[#DCEEFF] hover:text-[var(--primary-red)]"
+            >
+              School Activities
+            </Link>
+            <Link
+              href="/contact"
+              onClick={() => setIsMenuOpen(false)}
+              className="rounded px-3 py-3 text-sm font-semibold transition-colors hover:bg-[#DCEEFF] hover:text-[var(--primary-red)]"
+            >
+              Contact
+            </Link>
+          </nav>
+        </div>
+      )}
 
       <section id="admissions" className="bg-[var(--primary-navy)] px-5 pb-5 pt-8 text-[var(--white)] md:pb-6 md:pt-10">
         <div className="mx-auto grid max-w-[1180px] items-start gap-6 lg:grid-cols-[1.02fr_0.98fr] lg:gap-8">
