@@ -23,14 +23,6 @@ export default function SchoolActivitiesPage() {
 
   const submitEnquiry = async (event) => {
     event.preventDefault();
-    if (fields.activityType === 'badminton') {
-      router.push('/school-activities/badminton');
-      return;
-    }
-    if (fields.activityType === 'kidz-gym') {
-      router.push('/school-activities/kids-gym');
-      return;
-    }
     setError('');
     setSuccess('');
     setIsSubmitting(true);
@@ -42,6 +34,14 @@ export default function SchoolActivitiesPage() {
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || 'Failed to submit enquiry');
+      if (fields.activityType === 'badminton') {
+        router.push('/school-activities/badminton');
+        return;
+      }
+      if (fields.activityType === 'kidz-gym') {
+        router.push('/school-activities/kids-gym');
+        return;
+      }
       setSuccess('Enquiry submitted successfully!');
     } catch (submitError) {
       setError(
