@@ -1,10 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 export default function SchoolActivitiesPage() {
-  const router = useRouter();
   const [fields, setFields] = useState({
     name: '',
     email: '',
@@ -35,11 +33,11 @@ export default function SchoolActivitiesPage() {
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || 'Failed to submit enquiry');
       if (fields.activityType === 'badminton') {
-        router.push('/school-activities/badminton');
+        window.location.href = '/school-activities/badminton';
         return;
       }
       if (fields.activityType === 'kidz-gym') {
-        router.push('/school-activities/kids-gym');
+        window.location.href = '/school-activities/kids-gym';
         return;
       }
       setSuccess('Enquiry submitted successfully!');
