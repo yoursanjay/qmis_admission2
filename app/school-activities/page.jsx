@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function SchoolActivitiesPage() {
+  const router = useRouter();
   const [fields, setFields] = useState({
     name: '',
     email: '',
@@ -21,6 +23,14 @@ export default function SchoolActivitiesPage() {
 
   const submitEnquiry = async (event) => {
     event.preventDefault();
+    if (fields.activityType === 'badminton') {
+      router.push('/school-activities/badminton');
+      return;
+    }
+    if (fields.activityType === 'kidz-gym') {
+      router.push('/school-activities/kids-gym');
+      return;
+    }
     setError('');
     setSuccess('');
     setIsSubmitting(true);
